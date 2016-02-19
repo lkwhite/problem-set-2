@@ -2,7 +2,7 @@
 
 datasets='/Users/lkw/2016-GA-Workshop/data-sets/'
 
-hg19fa="$datasets/fasta/chr1.hg19.fa"
+hg19fa="$datasets/fasta/hg19.chr22.fa"
 H3K4me3="$datasets/bed/encode.h3k4me3.hela.chr22.bed.gz"
 hg19bed="$datasets/bed/genes.hg19.bed.gz"
 encode="$datasets/bed/encode.tfbs.chr22.bed.gz"
@@ -23,20 +23,34 @@ echo "answer-1: $answer_1"
 # Question 2: Use bedtools to calc the GC content of
 # nucleotides 19,000,000 to 19,000,500 on chr22 of hg19
 # genome build. Report the GC content as a fraction (e.g. 0.50)
-answer_2=
+
+# bedtools nuc provides the nucleotide content of intervals in .fa
+# usage = bedtools nuc [OPTIONS] -fi <fasta> -bed <bed/gff/vcf>
+
+# the first echo part creates a temporary bed file containing
+# only the region of interest on chr22 using std bed format
+# the -e arg is for printing escaped chars (vs literal text)
+# ihavenoideawhatimdoing dog gif goes here
+
+answer_2=$(echo -e "chr22\t19000000\t19000500" > tmp.bed \
+        | bedtools nuc -fi $hg19fa -bed tmp.bed \
+        | cut -f5 \
+        | tail -n1 )
 
 echo "answer-2: $answer_2"
 
 # Question 3: Use bedtools to ID the length of the CTCF ChIP-seq
 # peak (i.e., interval) that has the largest mean signal in 
 # ctcf.hela.chr22.bg.gz.
-answer_2=
+# MAP
+answer_3=
 
 echo "answer-3: $answer_3"
 
 # Question 4: Use bedtools to ID the gene promotor (defined as:
 # 1000 bp upstream of a TSS) w/ the highest median signal in
 # ctcf.hela.chr22.bg.gz. Report the gene name (e.g., 'ABC123')
+# FLANK
 answer_4=
 
 echo "answer-4: $answer_4"
@@ -44,7 +58,8 @@ echo "answer-4: $answer_4"
 # Question 5: use bedtools to id the longest interval on chr22
 # that is not covered by genes.hg19.bed. Report the interval
 # like chr1: 100-500.
-answer_2=
+# COMPLEMENT
+answer_5=
 
 echo "answer-5: $answer_5"
 
