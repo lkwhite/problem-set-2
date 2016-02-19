@@ -6,14 +6,18 @@ hg19fa="$datasets/fasta/chr1.hg19.fa"
 H3K4me3="$datasets/bed/encode.h3k4me3.hela.chr22.bed.gz"
 hg19bed="$datasets/bed/genes.hg19.bed.gz"
 encode="$datasets/bed/encode.tfbs.chr22.bed.gz"
-bedgraph="$datasets/bedgraph/ctcf.hela.chr22.bg.gz"
+bedgraph="$datasets/bedtools/ctcf.hela.chr22.bg.gz"
 hg19gen="$datasets/genome/hg19.genome"
 TSS="$datasets/bed/tss.hg19.chr22.bed.gz"
 
 # Question 1: Use bedtools intersect to ID size of
 # largest overlap between CTCF and H3K4me locations
-answer_1=
-
+answer_1=$(bedtools intersect -a \
+        <(gzcat $encode | awk '$4=="CTCF"') -b $H3K4me3 \
+        | awk 'BEGIN{OFS="\t"} {print $3 - $2}' \
+        | sort -nr \
+        | head -n1)
+ 
 echo "answer-1: $answer_1"
 
 # Question 2: Use bedtools to calc the GC content of
@@ -49,3 +53,5 @@ echo "answer-5: $answer_5"
 answer_6=
 
 echo "answer-6: $answer_6"
+
+
