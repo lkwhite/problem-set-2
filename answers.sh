@@ -70,10 +70,15 @@ echo "answer-4: $answer_4"
 # that is not covered by genes.hg19.bed. Report the interval
 # like chr1: 100-500.
 # COMPLEMENT
-answer_5=$(bedtools complement -i $hg19bed -g $hg19gen \
+bedtools complement -i $hg19bed -g $hg19gen > complement.bed
+answer_5=$(grep -w "chr22" complement.bed \
+        | awk '{print $1, $2, $3, $3-$2}' \
         | sort -k4nr \
         | head -n1 \
-        | awk '{print $1":"$2"-"$3}')
+        | awk 'BEGIN {OFS=""} {print $1,":"$2,"-"$3}')
+
+
+
 
 echo "answer-5: $answer_5"
 
